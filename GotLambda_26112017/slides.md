@@ -25,3 +25,23 @@ First
 
 
 
+
+
+References
+----------
+
+
+
+
+
+
+# Vertical subslides
+
+## First
+
+- `github.com/ocramz/talks/tree/master/GotLambda_26112017`
+
+## Second
+
+- baz
+
