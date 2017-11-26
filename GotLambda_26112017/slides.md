@@ -1,5 +1,5 @@
 % Building microservices in Haskell
-% Marco Zocca
+% Marco Zocca (`github.com/ocramz`)
 % Zimpler, November 29, 2017
 
 
@@ -22,3 +22,6 @@ First
 * first
 * things
 * first
+
+
+
