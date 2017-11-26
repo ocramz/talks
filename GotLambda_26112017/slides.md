@@ -6,9 +6,13 @@
 Code
 ----
 
-``` 
-main = do
+```
+main :: MonadIO m => m ()
+main = liftIO $ do
    putStrLn "hello!"
+
+data Foo a = Bar | Baz a deriving (Eq, Show)
+
 ```
 
 
