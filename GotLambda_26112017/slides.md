@@ -6,9 +6,10 @@
 Code
 ----
 
-    main = do
-      putStrLn "hello!"
-
+``` 
+main = do
+   putStrLn "hello!"
+```
 
 
 First
