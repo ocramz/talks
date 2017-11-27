@@ -43,7 +43,7 @@ req
      -> m response
 ```
 
-## An GET request
+## A GET request
 
 ```
 request1 :: MonadHttp m => m LB.ByteString
@@ -61,27 +61,6 @@ request1 = do
 
 
 
-
-
-# Code
-
-
-```
-main :: MonadIO m => m ()
-main = liftIO $ do
-   putStrLn "hello!"
-
-data Foo a = Bar | Baz a deriving (Eq, Show)
-
-```
-
-
-# First
-
-
-* first
-* things
-* first
 
 
 
