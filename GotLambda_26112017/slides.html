@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 
-<title>Building microservices in Haskell</title>
+<title>Building data microservices in Haskell</title>
 
-<meta name="description" content="Building microservices in Haskell">    
+<meta name="description" content="Building data microservices in Haskell">    
 
   <meta name="author" content="Marco Zocca (<code>github.com/ocramz</code>)" />
 
@@ -52,7 +52,7 @@
   
 
 <section>
-<h1>Building microservices in Haskell</h1>
+<h1>Building data microservices in Haskell</h1>
 <h3>Marco Zocca (<code>github.com/ocramz</code>)</h3>
 <p>
 <h4>Zimpler, November 29, 2017</h4>
@@ -79,6 +79,14 @@
 </ul></li>
 </ul>
 </section>
+<section id="requirements" class="level1">
+<h1>Requirements</h1>
+<ul>
+<li>Easy to verify/test</li>
+<li><p>Easy to extend with new data providers</p></li>
+<li><p>Simple API</p></li>
+</ul>
+</section>
 <section id="warm-up-http" class="level1">
 <h1>Warm-up : HTTP</h1>
 <section id="section" class="level2">
@@ -100,8 +108,8 @@
      -&gt; Option scheme
      -&gt; m response</code></pre>
 </section>
-<section id="an-get-request" class="level2">
-<h2>An GET request</h2>
+<section id="a-get-request" class="level2">
+<h2>A GET request</h2>
 <pre><code>request1 :: MonadHttp m =&gt; m LB.ByteString
 request1 = do
    r &lt;- req
@@ -114,29 +122,12 @@ request1 = do
 </code></pre>
 </section>
 </section>
-<section id="code" class="level1">
-<h1>Code</h1>
-<pre><code>main :: MonadIO m =&gt; m ()
-main = liftIO $ do
-   putStrLn &quot;hello!&quot;
-
-data Foo a = Bar | Baz a deriving (Eq, Show)
-</code></pre>
-</section>
-<section id="first" class="level1">
-<h1>First</h1>
-<ul>
-<li>first</li>
-<li>things</li>
-<li>first</li>
-</ul>
-</section>
 <section id="references" class="level1">
 <h1>References</h1>
 </section>
 <section id="vertical-subslides" class="level1">
 <h1>Vertical subslides</h1>
-<section id="first-1" class="level2">
+<section id="first" class="level2">
 <h2>First</h2>
 <ul>
 <li><code>github.com/ocramz/talks/tree/master/GotLambda_26112017</code></li>

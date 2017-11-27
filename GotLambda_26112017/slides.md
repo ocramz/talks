@@ -1,17 +1,16 @@
-% Building microservices in Haskell
+% Building data microservices in Haskell
 % Marco Zocca (`github.com/ocramz`)
 % Zimpler, November 29, 2017
 
 
-
 # Introduction
-
 
 * "Data pipeline"
 * Microservices = functionally independent units in the pipeline
 
-# This talk
 
+
+# This talk
 
 Data ingestion service
 
@@ -19,6 +18,15 @@ Data ingestion service
 - Resilience:
     - State is only external to the service (cloud storage)
     - Retry logic
+
+
+# Requirements
+
+
+- Easy to verify/test
+- Easy to extend with new data providers
+
+- Simple API
 
 
 
