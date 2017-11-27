@@ -3,8 +3,68 @@
 % Zimpler, November 29, 2017
 
 
-Code
-----
+
+# Introduction
+
+
+* "Data pipeline"
+* Microservices = functionally independent units in the pipeline
+
+# This talk
+
+
+Data ingestion service
+
+- `cron`-job for REST-based data retrieval
+- Resilience:
+    - State is only external to the service (cloud storage)
+    - Retry logic
+
+
+
+# Warm-up : HTTP
+
+##
+
+- [`req`](http://hackage.haskell.org/package/req) (http://hackage.haskell.org/package/req)
+
+##
+
+```
+req
+  :: (HttpResponse response, HttpBody body, HttpMethod method,
+      MonadHttp m,
+      HttpBodyAllowed (AllowsBody method) (ProvidesBody body)) =>
+     method
+     -> Url scheme
+     -> body
+     -> Proxy response
+     -> Option scheme
+     -> m response
+```
+
+## An GET request
+
+```
+request1 :: MonadHttp m => m LB.ByteString
+request1 = do
+   r <- req
+      GET
+      (https "www.google.com")
+      NoReqBody
+      lbsResponse
+      mempty
+   return $ responseBody r   
+
+```
+
+
+
+
+
+
+# Code
+
 
 ```
 main :: MonadIO m => m ()
@@ -16,8 +76,8 @@ data Foo a = Bar | Baz a deriving (Eq, Show)
 ```
 
 
-First
-------
+# First
+
 
 * first
 * things
@@ -27,8 +87,8 @@ First
 
 
 
-References
-----------
+# References
+
 
 
 

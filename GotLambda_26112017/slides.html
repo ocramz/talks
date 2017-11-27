@@ -48,6 +48,9 @@
 <!-- Any section element inside of this container is displayed as a slide -->
 <div class="slides">
 
+
+  
+
 <section>
 <h1>Building microservices in Haskell</h1>
 <h3>Marco Zocca (<code>github.com/ocramz</code>)</h3>
@@ -57,8 +60,62 @@
 </section>  
 
 
-<section id="code" class="level2">
-<h2>Code</h2>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<ul>
+<li>&quot;Data pipeline&quot;</li>
+<li>Microservices = functionally independent units in the pipeline</li>
+</ul>
+</section>
+<section id="this-talk" class="level1">
+<h1>This talk</h1>
+<p>Data ingestion service</p>
+<ul>
+<li><code>cron</code>-job for REST-based data retrieval</li>
+<li>Resilience:
+<ul>
+<li>State is only external to the service (cloud storage)</li>
+<li>Retry logic</li>
+</ul></li>
+</ul>
+</section>
+<section id="warm-up-http" class="level1">
+<h1>Warm-up : HTTP</h1>
+<section id="section" class="level2">
+<h2></h2>
+<ul>
+<li><a href="http://hackage.haskell.org/package/req"><code>req</code></a> (http://hackage.haskell.org/package/req)</li>
+</ul>
+</section>
+<section id="section-1" class="level2">
+<h2></h2>
+<pre><code>req
+  :: (HttpResponse response, HttpBody body, HttpMethod method,
+      MonadHttp m,
+      HttpBodyAllowed (AllowsBody method) (ProvidesBody body)) =&gt;
+     method
+     -&gt; Url scheme
+     -&gt; body
+     -&gt; Proxy response
+     -&gt; Option scheme
+     -&gt; m response</code></pre>
+</section>
+<section id="an-get-request" class="level2">
+<h2>An GET request</h2>
+<pre><code>request1 :: MonadHttp m =&gt; m LB.ByteString
+request1 = do
+   r &lt;- req
+      GET
+      (https &quot;www.google.com&quot;)
+      NoReqBody
+      lbsResponse
+      mempty
+   return $ responseBody r   
+</code></pre>
+</section>
+</section>
+<section id="code" class="level1">
+<h1>Code</h1>
 <pre><code>main :: MonadIO m =&gt; m ()
 main = liftIO $ do
    putStrLn &quot;hello!&quot;
@@ -66,19 +123,19 @@ main = liftIO $ do
 data Foo a = Bar | Baz a deriving (Eq, Show)
 </code></pre>
 </section>
-<section id="first" class="level2">
-<h2>First</h2>
+<section id="first" class="level1">
+<h1>First</h1>
 <ul>
 <li>first</li>
 <li>things</li>
 <li>first</li>
 </ul>
 </section>
-<section id="references" class="level2">
-<h2>References</h2>
+<section id="references" class="level1">
+<h1>References</h1>
 </section>
-<section id="slides-available-at" class="level1">
-<h1>Slides available at</h1>
+<section id="vertical-subslides" class="level1">
+<h1>Vertical subslides</h1>
 <section id="first-1" class="level2">
 <h2>First</h2>
 <ul>
@@ -93,6 +150,8 @@ data Foo a = Bar | Baz a deriving (Eq, Show)
 </section>
 </section>
 </div>
+
+
 
 <script src="lib/js/head.min.js"></script>
 <script src="js/reveal.js"></script>
