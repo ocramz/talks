@@ -15,9 +15,14 @@
 Data ingestion service
 
 - `cron`-job for REST-based data retrieval
-- Resilience:
+
+- Service resilience
     - State is only external to the service (cloud storage)
-    - Retry logic
+
+- Dataset resilience
+    - Providers fail/change their mind
+    
+  
 
 
 # Requirements

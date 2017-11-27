@@ -71,11 +71,14 @@
 <h1>This talk</h1>
 <p>Data ingestion service</p>
 <ul>
-<li><code>cron</code>-job for REST-based data retrieval</li>
-<li>Resilience:
+<li><p><code>cron</code>-job for REST-based data retrieval</p></li>
+<li>Service resilience
 <ul>
 <li>State is only external to the service (cloud storage)</li>
-<li>Retry logic</li>
+</ul></li>
+<li>Dataset resilience
+<ul>
+<li>Providers fail/change their mind</li>
 </ul></li>
 </ul>
 </section>
