@@ -155,7 +155,7 @@ newtype Cloud c a = Cloud {
   } deriving (Functor, Applicative, Monad)
 ```
 
-- "`mtl` style" : need `MonadIO`, `MonadThrow`, `MonadCatch`, `CR.MonadRandom`, `MonadReader` instances
+- We'll also need `MonadIO`, `MonadThrow`, `MonadCatch`, `CR.MonadRandom`, `MonadReader` instances
 
 
 
@@ -174,7 +174,7 @@ instance MonadHttp (Cloud GCP) where
   handleHttpException = throwM
 ```
 
-- "Phantom types"
+- `GCP` is a "phantom type"
 - One type per data provider
 
 
@@ -190,12 +190,23 @@ requestToken = do
 ```
 
 ```
+requestGcpOAuth2Token :: (MonadHttp m, CR.MonadRandom m, MonadThrow m) =>
+     GCPServiceAccount -> GCPTokenOptions -> m OAuth2Token
+```
+-------
+
+
+```
 getToken :: IO OAuth2Token
 getToken = do
    sa <- GCPServiceAccount <$>
      gcpPrivateRSAKey <*>
      gcpClientEmail 
    evalCloudIO sa requestToken 
+```
+
+```
+evalCloudIO :: (MonadIO m, MonadCatch m, HasCredentials c) => Handle c -> Cloud c a -> m a
 ```
 
 
