@@ -15,6 +15,8 @@
 
 - Data ingestion service
 
+A handful of useful Haskell notions and techniques
+
 How I work with libraries and APIs
 
 
@@ -156,7 +158,7 @@ newtype Cloud c a = Cloud {
 ```
 
 - We'll also need `MonadIO`, `MonadThrow`, `MonadCatch`, `CR.MonadRandom`, `MonadReader` instances
-
+- `TVar` is from `stm`
 
 
 ## 

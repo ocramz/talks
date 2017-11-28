@@ -73,6 +73,7 @@
 <ul>
 <li>Data ingestion service</li>
 </ul>
+<p>A handful of useful Haskell notions and techniques</p>
 <p>How I work with libraries and APIs</p>
 </section>
 <section id="requirements" class="level1">
@@ -192,6 +193,7 @@ data Handle a = Handle {
   } deriving (Functor, Applicative, Monad)</code></pre>
 <ul>
 <li>We'll also need <code>MonadIO</code>, <code>MonadThrow</code>, <code>MonadCatch</code>, <code>CR.MonadRandom</code>, <code>MonadReader</code> instances</li>
+<li><code>TVar</code> is from <code>stm</code></li>
 </ul>
 </section>
 <section id="section-6" class="level2">
@@ -232,21 +234,9 @@ getToken = do
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
-</section>
-<section id="vertical-subslides" class="level1">
-<h1>Vertical subslides</h1>
-<section id="first" class="level2">
-<h2>First</h2>
 <ul>
 <li><code>github.com/ocramz/talks/tree/master/GotLambda_26112017</code></li>
 </ul>
-</section>
-<section id="second" class="level2">
-<h2>Second</h2>
-<ul>
-<li>baz</li>
-</ul>
-</section>
 </section>
 </div>
 
