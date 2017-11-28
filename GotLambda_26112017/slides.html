@@ -111,17 +111,39 @@
      -&gt; Option scheme
      -&gt; m response</code></pre>
 </section>
-<section id="a-get-request" class="level2">
-<h2>A GET request</h2>
-<pre><code>request1 :: MonadHttp m =&gt; m LB.ByteString
-request1 = do
+<section id="section-2" class="level2">
+<h2></h2>
+<pre><code>requestGet :: MonadHttp m =&gt; m LB.ByteString
+requestGet = do
    r &lt;- req
       GET
-      (https &quot;www.google.com&quot;)
+      (https &quot;www.meetup.com&quot; /: &quot;got-lambda&quot;)
       NoReqBody
       lbsResponse
       mempty
    return $ responseBody r   
+</code></pre>
+</section>
+<section id="section-3" class="level2">
+<h2></h2>
+<pre><code>requestGCPTokenJSON ::
+     (MonadThrow m, CR.MonadRandom m, MonadHttp m) =&gt;
+     GCPServiceAccount -&gt; GCPTokenOptions -&gt; m LB.ByteString      
+requestGCPTokenJSON serviceAcct opts = do
+  jwt &lt;- T.decodeUtf8 &lt;$&gt; encodeBearerJWT serviceAcct opts
+  let
+    args = [
+       (&quot;grant_type&quot;, T.pack $ urlEncode &quot;urn:ietf:params:oauth:grant-type:jwt-bearer&quot;),
+       (&quot;assertion&quot;, jwt)]
+    payload = encodeHttpParameters args
+  r &lt;- req
+         POST
+         (https &quot;www.googleapis.com&quot; /: &quot;oauth2&quot; /: &quot;v4&quot; /: &quot;token&quot;)
+         (ReqBodyLbs payload)
+         lbsResponse
+         (header &quot;Content-Type&quot; &quot;application/x-www-form-urlencoded; charset=utf-8&quot;)
+  return $ responseBody r
+  
 </code></pre>
 </section>
 </section>

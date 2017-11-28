@@ -143,10 +143,11 @@ body {
 .reveal pre {
   display: block;
   position: relative;
-  width: 90%;
+  width: 100%;
+  height: 100%;
   margin: 20px auto;
   text-align: left;
-  font-size: 0.55em;
+  font-size: 0.45em;
   font-family: monospace;
   line-height: 1.2em;
   word-wrap: break-word;
@@ -154,7 +155,9 @@ body {
 
 .reveal code {
   font-family: monospace;
-  text-transform: none; }
+  text-transform: none;
+  width: 100%;
+  height: 100%; }
 
 .reveal pre code {
   display: block;
