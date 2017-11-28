@@ -39,8 +39,7 @@ How I work with libraries and APIs
 ##
 
 ```
-req
-  :: (HttpResponse response, HttpBody body, HttpMethod method,
+req :: (HttpResponse response, HttpBody body, HttpMethod method,
       MonadHttp m,
       HttpBodyAllowed (AllowsBody method) (ProvidesBody body)) =>
      method
@@ -77,7 +76,8 @@ requestGCPToken serviceAcct opts = do
     payload = encodeHttpParametersLB [
        ("grant_type", T.pack $ urlEncode "urn:ietf:params:oauth:grant-type:jwt-bearer"),
        ("assertion", jwt)]
-  r <- req POST
+  r <- req
+         POST
          (https "www.googleapis.com" /: "oauth2" /: "v4" /: "token")
          (ReqBodyLbs payload)
          lbsResponse
@@ -128,9 +128,14 @@ class Control.Monad.IO.Class.MonadIO m => MonadHttp (m :: * -> *) where
 
 
 
+
 # Multiple data providers
 
+##
+
 ```
+{-# language TypeFamilies #-}
+
 class HasCredentials a where
   type Credentials a :: *
   type Token a :: *
@@ -143,6 +148,20 @@ data Handle a = Handle {
 newtype Cloud c a = Cloud {
   runCloud :: ReaderT (Handle c) IO a
   } deriving (Functor, Applicative, Monad)
+```
+
+
+## One type per provider
+
+```
+data GCP
+
+instance HasCredentials GCP where
+  type Credentials GCP = GCPServiceAccount
+  type Token GCP = OAuth2Token
+
+instance MonadHttp (Cloud GCP) where
+  handleHttpException = throwM
 ```
 
 

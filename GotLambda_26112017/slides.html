@@ -95,8 +95,7 @@
 </section>
 <section id="section-1" class="level2">
 <h2></h2>
-<pre><code>req
-  :: (HttpResponse response, HttpBody body, HttpMethod method,
+<pre><code>req :: (HttpResponse response, HttpBody body, HttpMethod method,
       MonadHttp m,
       HttpBodyAllowed (AllowsBody method) (ProvidesBody body)) =&gt;
      method
@@ -129,7 +128,8 @@ requestGCPToken serviceAcct opts = do
     payload = encodeHttpParametersLB [
        (&quot;grant_type&quot;, T.pack $ urlEncode &quot;urn:ietf:params:oauth:grant-type:jwt-bearer&quot;),
        (&quot;assertion&quot;, jwt)]
-  r &lt;- req POST
+  r &lt;- req
+         POST
          (https &quot;www.googleapis.com&quot; /: &quot;oauth2&quot; /: &quot;v4&quot; /: &quot;token&quot;)
          (ReqBodyLbs payload)
          lbsResponse
@@ -174,7 +174,11 @@ class Control.Monad.IO.Class.MonadIO m =&gt; MonadHttp (m :: * -&gt; *) where
 </section>
 <section id="multiple-data-providers" class="level1">
 <h1>Multiple data providers</h1>
-<pre><code>class HasCredentials a where
+<section id="section-5" class="level2">
+<h2></h2>
+<pre><code>{-# language TypeFamilies #-}
+
+class HasCredentials a where
   type Credentials a :: *
   type Token a :: *
 
@@ -186,6 +190,18 @@ data Handle a = Handle {
 newtype Cloud c a = Cloud {
   runCloud :: ReaderT (Handle c) IO a
   } deriving (Functor, Applicative, Monad)</code></pre>
+</section>
+<section id="one-type-per-provider" class="level2">
+<h2>One type per provider</h2>
+<pre><code>data GCP
+
+instance HasCredentials GCP where
+  type Credentials GCP = GCPServiceAccount
+  type Token GCP = OAuth2Token
+
+instance MonadHttp (Cloud GCP) where
+  handleHttpException = throwM</code></pre>
+</section>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
