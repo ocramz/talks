@@ -126,25 +126,48 @@ requestGet = do
 </section>
 <section id="section-3" class="level2">
 <h2></h2>
-<pre><code>requestGCPTokenJSON ::
-     (MonadThrow m, CR.MonadRandom m, MonadHttp m) =&gt;
-     GCPServiceAccount -&gt; GCPTokenOptions -&gt; m LB.ByteString      
-requestGCPTokenJSON serviceAcct opts = do
+<pre><code>requestGCPToken :: (MonadThrow m, CR.MonadRandom m, MonadHttp m) =&gt;
+     GCPServiceAccount -&gt; GCPTokenOptions -&gt; m OAuth2Token      
+requestGCPToken serviceAcct opts = do
   jwt &lt;- T.decodeUtf8 &lt;$&gt; encodeBearerJWT serviceAcct opts
   let
     args = [
        (&quot;grant_type&quot;, T.pack $ urlEncode &quot;urn:ietf:params:oauth:grant-type:jwt-bearer&quot;),
        (&quot;assertion&quot;, jwt)]
     payload = encodeHttpParameters args
-  r &lt;- req
-         POST
+  r &lt;- req POST
          (https &quot;www.googleapis.com&quot; /: &quot;oauth2&quot; /: &quot;v4&quot; /: &quot;token&quot;)
          (ReqBodyLbs payload)
          lbsResponse
          (header &quot;Content-Type&quot; &quot;application/x-www-form-urlencoded; charset=utf-8&quot;)
-  return $ responseBody r
-  
+  maybe
+    (throwM $ NotFound &quot;Something went wrong with the token request&quot;)
+    pure
+    (J.decode (responseBody r) :: Maybe OAuth2Token)
 </code></pre>
+</section>
+<section id="section-4" class="level2">
+<h2></h2>
+<pre><code>{-# language OverloadedStrings #-}
+import Network.HTTP.Req
+import qualified Data.Aeson as J
+import qualified Data.Text as T
+import qualified Data.Text.Encoding as T (encodeUtf8, decodeUtf8)
+import qualified Data.ByteString.Lazy as LB
+import qualified Data.ByteString.Char8 as B8
+import qualified Crypto.Hash.Algorithms as CR
+import qualified Crypto.PubKey.RSA.PKCS15 as CR (signSafer) 
+import qualified Crypto.Random.Types as CR
+import Data.Time</code></pre>
+<p>Dependencies:</p>
+<ul>
+<li><code>req</code></li>
+<li><code>aeson</code></li>
+<li><code>text</code></li>
+<li><code>bytestring</code></li>
+<li><code>cryptonite</code></li>
+<li><code>time</code></li>
+</ul>
 </section>
 </section>
 <section id="references" class="level1">
