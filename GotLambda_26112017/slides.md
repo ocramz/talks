@@ -3,7 +3,9 @@
 % Zimpler, November 29, 2017
 
 
-# Introduction
+# Hi !
+
+* Data engineer @ RecordUnion
 
 * "Data pipeline"
 * Microservices = functional units in a distributed program
@@ -120,11 +122,12 @@ Dependencies:
 
 ```
 > :i MonadHttp
-class Control.Monad.IO.Class.MonadIO m => MonadHttp (m :: * -> *) where
+class MonadIO m => MonadHttp (m :: * -> *) where
   handleHttpException :: HttpException -> m a
-  getHttpConfig :: m HttpConfig
+  ...
   {-# MINIMAL handleHttpException #-}
 ```
+
 
 
 
@@ -144,16 +147,23 @@ data Handle a = Handle {
     credentials :: Credentials a
   , token :: TVar (Maybe (Token a))
   }
+```
 
+```
 newtype Cloud c a = Cloud {
   runCloud :: ReaderT (Handle c) IO a
   } deriving (Functor, Applicative, Monad)
 ```
 
+- "`mtl` style" : need `MonadIO`, `MonadThrow`, `MonadCatch`, `CR.MonadRandom`, `MonadReader` instances
 
-## One type per provider
+
+
+## 
 
 ```
+{-# language FlexibleInstances #-}
+
 data GCP
 
 instance HasCredentials GCP where
@@ -163,6 +173,9 @@ instance HasCredentials GCP where
 instance MonadHttp (Cloud GCP) where
   handleHttpException = throwM
 ```
+
+- "Phantom types"
+- One type per data provider
 
 
 

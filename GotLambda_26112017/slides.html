@@ -60,11 +60,12 @@
 </section>  
 
 
-<section id="introduction" class="level1">
-<h1>Introduction</h1>
+<section id="hi" class="level1">
+<h1>Hi !</h1>
 <ul>
+<li><p>Data engineer @ RecordUnion</p></li>
 <li>&quot;Data pipeline&quot;</li>
-<li>Microservices = functional units in a distributed program</li>
+<li><p>Microservices = functional units in a distributed program</p></li>
 </ul>
 </section>
 <section id="this-talk" class="level1">
@@ -167,9 +168,9 @@ import Data.Time</code></pre>
 <section id="monadhttp" class="level1">
 <h1>MonadHttp</h1>
 <pre><code>&gt; :i MonadHttp
-class Control.Monad.IO.Class.MonadIO m =&gt; MonadHttp (m :: * -&gt; *) where
+class MonadIO m =&gt; MonadHttp (m :: * -&gt; *) where
   handleHttpException :: HttpException -&gt; m a
-  getHttpConfig :: m HttpConfig
+  ...
   {-# MINIMAL handleHttpException #-}</code></pre>
 </section>
 <section id="multiple-data-providers" class="level1">
@@ -185,15 +186,19 @@ class HasCredentials a where
 data Handle a = Handle {
     credentials :: Credentials a
   , token :: TVar (Maybe (Token a))
-  }
-
-newtype Cloud c a = Cloud {
+  }</code></pre>
+<pre><code>newtype Cloud c a = Cloud {
   runCloud :: ReaderT (Handle c) IO a
   } deriving (Functor, Applicative, Monad)</code></pre>
+<ul>
+<li>&quot;<code>mtl</code> style&quot; : need <code>MonadIO</code>, <code>MonadThrow</code>, <code>MonadCatch</code>, <code>CR.MonadRandom</code>, <code>MonadReader</code> instances</li>
+</ul>
 </section>
-<section id="one-type-per-provider" class="level2">
-<h2>One type per provider</h2>
-<pre><code>data GCP
+<section id="section-6" class="level2">
+<h2></h2>
+<pre><code>{-# language FlexibleInstances #-}
+
+data GCP
 
 instance HasCredentials GCP where
   type Credentials GCP = GCPServiceAccount
@@ -201,6 +206,10 @@ instance HasCredentials GCP where
 
 instance MonadHttp (Cloud GCP) where
   handleHttpException = throwM</code></pre>
+<ul>
+<li>&quot;Phantom types&quot;</li>
+<li>One type per data provider</li>
+</ul>
 </section>
 </section>
 <section id="references" class="level1">
