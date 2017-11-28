@@ -179,6 +179,26 @@ instance MonadHttp (Cloud GCP) where
 
 
 
+## Ergonomics
+
+```
+requestToken :: Cloud GCP OAuth2Token
+requestToken = do
+   saOk <- asks credentials
+   let opts = GCPTokenOptions scopes
+   requestGcpOAuth2Token saOk opts
+```
+
+```
+getToken :: IO OAuth2Token
+getToken = do
+   sa <- GCPServiceAccount <$>
+     gcpPrivateRSAKey <*>
+     gcpClientEmail 
+   evalCloudIO sa requestToken 
+```
+
+
 
 
 

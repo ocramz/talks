@@ -211,6 +211,20 @@ instance MonadHttp (Cloud GCP) where
 <li>One type per data provider</li>
 </ul>
 </section>
+<section id="ergonomics" class="level2">
+<h2>Ergonomics</h2>
+<pre><code>requestToken :: Cloud GCP OAuth2Token
+requestToken = do
+   saOk &lt;- asks credentials
+   let opts = GCPTokenOptions scopes
+   requestGcpOAuth2Token saOk opts</code></pre>
+<pre><code>getToken :: IO OAuth2Token
+getToken = do
+   sa &lt;- GCPServiceAccount &lt;$&gt;
+     gcpPrivateRSAKey &lt;*&gt;
+     gcpClientEmail 
+   evalCloudIO sa requestToken </code></pre>
+</section>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
