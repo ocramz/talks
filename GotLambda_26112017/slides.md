@@ -215,19 +215,5 @@ evalCloudIO :: (MonadIO m, MonadCatch m, HasCredentials c) => Handle c -> Cloud 
 
 # References
 
-
-
-
-
-
-
-# Vertical subslides
-
-## First
-
 - `github.com/ocramz/talks/tree/master/GotLambda_26112017`
-
-## Second
-
-- baz
 
