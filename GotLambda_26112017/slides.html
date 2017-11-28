@@ -64,30 +64,25 @@
 <h1>Introduction</h1>
 <ul>
 <li>&quot;Data pipeline&quot;</li>
-<li>Microservices = functionally independent units in the pipeline</li>
+<li>Microservices = functional units in a distributed program</li>
 </ul>
 </section>
 <section id="this-talk" class="level1">
 <h1>This talk</h1>
-<p>Data ingestion service</p>
 <ul>
-<li><p><code>cron</code>-job for REST-based data retrieval</p></li>
-<li>Service resilience
-<ul>
-<li>State is only external to the service (cloud storage)</li>
-</ul></li>
-<li>Dataset resilience
-<ul>
-<li>Providers fail/change their mind</li>
-</ul></li>
+<li>Data ingestion service</li>
 </ul>
+<p>How I work with libraries and APIs</p>
 </section>
 <section id="requirements" class="level1">
 <h1>Requirements</h1>
 <ul>
+<li>Correct</li>
 <li>Easy to verify/test</li>
-<li><p>Easy to extend with new data providers</p></li>
-<li><p>Simple API</p></li>
+<li>Easy to extend with new data providers</li>
+<li>Simple API</li>
+<li>...</li>
+<li>Fast</li>
 </ul>
 </section>
 <section id="warm-up-http" class="level1">
@@ -131,10 +126,9 @@ requestGet = do
 requestGCPToken serviceAcct opts = do
   jwt &lt;- T.decodeUtf8 &lt;$&gt; encodeBearerJWT serviceAcct opts
   let
-    args = [
+    payload = encodeHttpParametersLB [
        (&quot;grant_type&quot;, T.pack $ urlEncode &quot;urn:ietf:params:oauth:grant-type:jwt-bearer&quot;),
        (&quot;assertion&quot;, jwt)]
-    payload = encodeHttpParameters args
   r &lt;- req POST
          (https &quot;www.googleapis.com&quot; /: &quot;oauth2&quot; /: &quot;v4&quot; /: &quot;token&quot;)
          (ReqBodyLbs payload)
@@ -169,6 +163,29 @@ import Data.Time</code></pre>
 <li><code>time</code></li>
 </ul>
 </section>
+</section>
+<section id="monadhttp" class="level1">
+<h1>MonadHttp</h1>
+<pre><code>&gt; :i MonadHttp
+class Control.Monad.IO.Class.MonadIO m =&gt; MonadHttp (m :: * -&gt; *) where
+  handleHttpException :: HttpException -&gt; m a
+  getHttpConfig :: m HttpConfig
+  {-# MINIMAL handleHttpException #-}</code></pre>
+</section>
+<section id="multiple-data-providers" class="level1">
+<h1>Multiple data providers</h1>
+<pre><code>class HasCredentials a where
+  type Credentials a :: *
+  type Token a :: *
+
+data Handle a = Handle {
+    credentials :: Credentials a
+  , token :: TVar (Maybe (Token a))
+  }
+
+newtype Cloud c a = Cloud {
+  runCloud :: ReaderT (Handle c) IO a
+  } deriving (Functor, Applicative, Monad)</code></pre>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
