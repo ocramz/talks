@@ -300,7 +300,9 @@ import Control.Monad.Catch</code></pre>
 </section>
 <section id="section-12" class="level2">
 <h2></h2>
-<pre><code>instance HasCredentials c =&gt; Alternative (Cloud c) where
+<pre><code>import Control.Applicative (Alternative(..))
+
+instance HasCredentials c =&gt; Alternative (Cloud c) where
     empty = throwM $ UnknownError &quot;empty&quot;
     a1 &lt;|&gt; a2 = do
       ra &lt;- try a1
@@ -309,6 +311,10 @@ import Control.Monad.Catch</code></pre>
         Left e -&gt; case (fromException e) :: Maybe CloudException of
           Just _ -&gt; a2
           Nothing -&gt; throwM (UnknownError &quot;d&#39;oh!&quot;)</code></pre>
+<ul>
+<li><code>Just _</code> branch may retry <code>a1</code> with different parameters</li>
+<li>Pattern match directly on <code>CloudException</code> constructors and retry selectively</li>
+</ul>
 </section>
 </section>
 <section id="references" class="level1">

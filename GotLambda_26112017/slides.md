@@ -289,6 +289,14 @@ instance HasCredentials c => Alternative (Cloud c) where
           Nothing -> throwM (UnknownError "d'oh!")
 ```
 
+```
+(<|>) :: Alternative f => f a -> f a -> f a
+empty <|> b == b
+a <|> empty == a
+```
+
+
+
 - `Just _` branch may retry `a1` with different parameters
 - Pattern match directly on `CloudException` constructors and retry selectively
 
