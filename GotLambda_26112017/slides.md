@@ -157,7 +157,7 @@ newtype Cloud c a = Cloud {
   } deriving (Functor, Applicative, Monad)
 ```
 
-- We'll also need `MonadIO`, `MonadThrow`, `MonadCatch`, `CR.MonadRandom`, `MonadReader` instances
+- `Cloud` will also need `MonadIO`, `MonadThrow`, `MonadCatch`, `CR.MonadRandom`, `MonadReader` instances
 - `TVar` is from `stm`
 
 
@@ -171,14 +171,15 @@ data GCP
 instance HasCredentials GCP where
   type Credentials GCP = GCPServiceAccount
   type Token GCP = OAuth2Token
-
+```
+```
 instance MonadHttp (Cloud GCP) where
   handleHttpException = throwM
 ```
 
 - `GCP` is a "phantom type"
 - One type per data provider
-
+    - Individual HTTP exception handling
 
 
 ## Ergonomics

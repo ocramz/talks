@@ -192,7 +192,7 @@ data Handle a = Handle {
   runCloud :: ReaderT (Handle c) IO a
   } deriving (Functor, Applicative, Monad)</code></pre>
 <ul>
-<li>We'll also need <code>MonadIO</code>, <code>MonadThrow</code>, <code>MonadCatch</code>, <code>CR.MonadRandom</code>, <code>MonadReader</code> instances</li>
+<li><code>Cloud</code> will also need <code>MonadIO</code>, <code>MonadThrow</code>, <code>MonadCatch</code>, <code>CR.MonadRandom</code>, <code>MonadReader</code> instances</li>
 <li><code>TVar</code> is from <code>stm</code></li>
 </ul>
 </section>
@@ -204,13 +204,15 @@ data GCP
 
 instance HasCredentials GCP where
   type Credentials GCP = GCPServiceAccount
-  type Token GCP = OAuth2Token
-
-instance MonadHttp (Cloud GCP) where
+  type Token GCP = OAuth2Token</code></pre>
+<pre><code>instance MonadHttp (Cloud GCP) where
   handleHttpException = throwM</code></pre>
 <ul>
 <li><code>GCP</code> is a &quot;phantom type&quot;</li>
-<li>One type per data provider</li>
+<li>One type per data provider
+<ul>
+<li>Individual HTTP exception handling</li>
+</ul></li>
 </ul>
 </section>
 <section id="ergonomics" class="level2">
