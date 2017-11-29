@@ -217,6 +217,7 @@ newtype Cloud c a = Cloud {
   runCloud :: ReaderT (Handle c) IO a
   } deriving (Functor, Applicative, Monad)</code></pre>
 <ul>
+<li><code>ReaderT env IO a</code> : <em>no mutable state</em> (see &quot;The ReaderT design pattern&quot;)</li>
 <li><code>Cloud</code> will also need <code>MonadIO</code>, <code>MonadThrow</code>, <code>MonadCatch</code>, <code>CR.MonadRandom</code>, <code>MonadReader</code> instances</li>
 </ul>
 </section>
@@ -248,8 +249,10 @@ requestToken = do
    requestGcpOAuth2Token saOk opts</code></pre>
 <pre><code>requestGcpOAuth2Token :: (MonadHttp m, CR.MonadRandom m, MonadThrow m) =&gt;
      GCPServiceAccount -&gt; GCPTokenOptions -&gt; m OAuth2Token</code></pre>
+<pre><code>&gt; :t asks credentials
+asks credentials :: MonadReader (Handle a) m =&gt; m (Credentials a)</code></pre>
 <ul>
-<li>Q: I don't know how to convince GHC that <code>OAuth2Token</code> is the return type of the <code>GCP</code>-tagged instance, therefore the type signature was not inferred automatically (&quot;ambiguous return type&quot;).</li>
+<li>Q: I don't know how to convince GHC that <code>GCPServiceAccount</code> is the <code>Credentials</code>-associated type of the <code>GCP</code>-tagged instance, therefore the type signature was not inferred automatically (&quot;ambiguous return type&quot;).</li>
 </ul>
 </section>
 <section id="section-9" class="level2">
@@ -280,10 +283,39 @@ import Control.Monad.Catch</code></pre>
 </ul>
 </section>
 </section>
+<section id="exception-handling" class="level1">
+<h1>Exception handling</h1>
+<section id="section-11" class="level2">
+<h2></h2>
+<ul>
+<li><code>f :: .. -&gt; Either ErrorType a</code> doesn't compose easily
+<ul>
+<li>What if caller of <code>f</code> returns <code>Either AnotherErrorType a</code> ?</li>
+</ul></li>
+<li><code>MonadThrow</code> and <code>MonadCatch</code> follow the GHC exception style (type of exceptions not in the signature).
+<ul>
+<li>Possible to &quot;refine out&quot; functions having only a <code>MonadThrow</code> constraint, which is <code>~</code> to returning in <code>Maybe</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="section-12" class="level2">
+<h2></h2>
+<pre><code>instance HasCredentials c =&gt; Alternative (Cloud c) where
+    empty = throwM $ UnknownError &quot;empty&quot;
+    a1 &lt;|&gt; a2 = do
+      ra &lt;- try a1
+      case ra of
+        Right x -&gt; pure x
+        Left e -&gt; case (fromException e) :: Maybe CloudException of
+          Just _ -&gt; a2
+          Nothing -&gt; throwM (UnknownError &quot;d&#39;oh!&quot;)</code></pre>
+</section>
+</section>
 <section id="references" class="level1">
 <h1>References</h1>
 <ul>
-<li><code>github.com/ocramz/talks/tree/master/GotLambda_26112017</code></li>
+<li><p><code>github.com/ocramz/talks/tree/master/GotLambda_26112017</code></p></li>
+<li><p>https://www.fpcomplete.com/blog/2017/06/readert-design-pattern</p></li>
 </ul>
 </section>
 </div>

@@ -176,6 +176,7 @@ newtype Cloud c a = Cloud {
   } deriving (Functor, Applicative, Monad)
 ```
 
+- `ReaderT env IO a` : _no mutable state_ (see "The ReaderT design pattern")
 - `Cloud` will also need `MonadIO`, `MonadThrow`, `MonadCatch`, `CR.MonadRandom`, `MonadReader` instances
 
 
@@ -201,6 +202,7 @@ instance MonadHttp (Cloud GCP) where
     - Individual HTTP exception handling
 
 
+
 ## Ergonomics
 
 ```
@@ -216,7 +218,13 @@ requestGcpOAuth2Token :: (MonadHttp m, CR.MonadRandom m, MonadThrow m) =>
      GCPServiceAccount -> GCPTokenOptions -> m OAuth2Token
 ```
 
-- Q: I don't know how to convince GHC that `OAuth2Token` is the return type of the `GCP`-tagged instance, therefore the type signature was not inferred automatically ("ambiguous return type").
+```
+> :t asks credentials
+asks credentials :: MonadReader (Handle a) m => m (Credentials a)
+```
+
+- Q: I don't know how to convince GHC that `GCPServiceAccount` is the `Credentials`-associated type of the `GCP`-tagged instance, therefore the type signature was not inferred automatically ("ambiguous return type").
+
 
 
 ##
@@ -254,10 +262,42 @@ Dependencies
 - `stm`
 
 
+# Exception handling
+
+##
+
+- `f :: .. -> Either ErrorType a` doesn't compose easily
+    - What if caller of `f` returns `Either AnotherErrorType a` ?
+
+- `MonadThrow` and `MonadCatch` follow the GHC exception style (type of exceptions not in the signature).
+    - Possible to "refine out" functions having only a `MonadThrow` constraint, which is `~` to returning in `Maybe`
+
+
+##
+
+```
+import Control.Applicative (Alternative(..))
+
+instance HasCredentials c => Alternative (Cloud c) where
+    empty = throwM $ UnknownError "empty"
+    a1 <|> a2 = do
+      ra <- try a1
+      case ra of
+        Right x -> pure x
+        Left e -> case (fromException e) :: Maybe CloudException of
+          Just _ -> a2
+          Nothing -> throwM (UnknownError "d'oh!")
+```
+
+- `Just _` branch may retry `a1` with different parameters
+- Pattern match directly on `CloudException` constructors and retry selectively
+
 
 
 
 # References
 
 - `github.com/ocramz/talks/tree/master/GotLambda_26112017`
+
+- https://www.fpcomplete.com/blog/2017/06/readert-design-pattern
 
