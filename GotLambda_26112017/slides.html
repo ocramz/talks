@@ -290,9 +290,28 @@ import Control.Monad.Catch</code></pre>
 </ul>
 </section>
 </section>
+<section id="wait-what" class="level1">
+<h1>Wait, what?</h1>
+<section id="section-11" class="level2">
+<h2></h2>
+<ul>
+<li><code>ReaderT env IO a</code> ... no <em>mutable</em> state</li>
+<li>but <code>env</code> contains a TVar</li>
+<li>... ?</li>
+</ul>
+</section>
+<section id="section-12" class="level2">
+<h2></h2>
+<pre><code>-- updateToken :: (MonadReader (Handle a) m, MonadIO m) =&gt; Token a -&gt; m ()
+updateToken :: HasCredentials c =&gt; Token c -&gt; Cloud c ()
+updateToken tok = do
+  tv &lt;- asks token
+  liftIO $ atomically $ writeTVar tv (Just tok)</code></pre>
+</section>
+</section>
 <section id="exception-handling" class="level1">
 <h1>Exception handling</h1>
-<section id="section-11" class="level2">
+<section id="section-13" class="level2">
 <h2></h2>
 <ul>
 <li><code>f :: .. -&gt; Either ErrorType a</code> doesn't compose easily
@@ -305,7 +324,7 @@ import Control.Monad.Catch</code></pre>
 </ul></li>
 </ul>
 </section>
-<section id="section-12" class="level2">
+<section id="section-14" class="level2">
 <h2></h2>
 <pre><code>import Control.Applicative (Alternative(..))
 

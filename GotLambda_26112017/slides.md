@@ -269,11 +269,11 @@ Dependencies:
 
 
 
-# Wait, what?
+# Mutable references in ReaderT
 
 ##
 
-- `ReaderT env IO a` ... no _mutable_ state
+- `ReaderT env IO a` claimed no _mutable_ state
 - but `env` contains a TVar
 - ... ?
 
