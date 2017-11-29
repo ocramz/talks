@@ -1,4 +1,4 @@
-% Building data microservices in Haskell, pt.1
+% Building data microservices in Haskell part 1
 % Marco Zocca (`github.com/ocramz`)
 % Zimpler, November 29, 2017
 

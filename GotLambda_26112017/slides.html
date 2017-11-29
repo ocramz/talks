@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 
-<title>Building data microservices in Haskell</title>
+<title>Building data microservices in Haskell part 1</title>
 
-<meta name="description" content="Building data microservices in Haskell">    
+<meta name="description" content="Building data microservices in Haskell part 1">    
 
   <meta name="author" content="Marco Zocca (<code>github.com/ocramz</code>)" />
 
@@ -52,7 +52,7 @@
   
 
 <section>
-<h1>Building data microservices in Haskell</h1>
+<h1>Building data microservices in Haskell part 1</h1>
 <h3>Marco Zocca (<code>github.com/ocramz</code>)</h3>
 <p>
 <h4>Zimpler, November 29, 2017</h4>
@@ -73,7 +73,12 @@
 <ul>
 <li>Data ingestion service</li>
 </ul>
-<p>A handful of useful Haskell notions, techniques, current good practices and libraries</p>
+<p>A handful of useful Haskell notions, techniques, current good practices and libraries:</p>
+<ul>
+<li>HTTP connections</li>
+<li>managing complexity with types</li>
+<li>exception handling</li>
+</ul>
 </section>
 <section id="requirements" class="level1">
 <h1>Requirements</h1>
@@ -319,6 +324,25 @@ instance HasCredentials c =&gt; Alternative (Cloud c) where
 <pre><code>a &lt;|&gt; empty == a
 empty &lt;|&gt; b != b</code></pre>
 </section>
+</section>
+<section id="summing-up" class="level1">
+<h1>Summing up</h1>
+<ul>
+<li>HTTP connections + authentication</li>
+<li>Managing complexity with types</li>
+<li>High- and low-level exception handling</li>
+</ul>
+</section>
+<section id="part-2-of-this-talk" class="level1">
+<h1>Part 2 of this talk :</h1>
+<ul>
+<li>Managing state with <code>stm</code></li>
+<li>Logging and persistence</li>
+<li>Deploying with Stack</li>
+</ul>
+</section>
+<section id="thanks" class="level1">
+<h1>Thanks !</h1>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
