@@ -312,16 +312,25 @@ instance HasCredentials c =&gt; Alternative (Cloud c) where
           Just _ -&gt; a2
           Nothing -&gt; throwM (UnknownError &quot;d&#39;oh!&quot;)</code></pre>
 <ul>
-<li><code>Just _</code> branch may retry <code>a1</code> with different parameters</li>
+<li><code>Just</code> branch may retry <code>a1</code> with different parameters</li>
 <li>Pattern match directly on <code>CloudException</code> constructors and retry selectively</li>
+<li>Exception type may break the monoid property of Alternative:</li>
 </ul>
+<pre><code>a &lt;|&gt; empty == a
+empty &lt;|&gt; b != b</code></pre>
 </section>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
 <ul>
-<li><p><code>github.com/ocramz/talks/tree/master/GotLambda_26112017</code></p></li>
-<li><p>https://www.fpcomplete.com/blog/2017/06/readert-design-pattern</p></li>
+<li>https://www.fpcomplete.com/blog/2017/06/readert-design-pattern</li>
+<li>https://www.schoolofhaskell.com/user/commercial/content/exceptions-best-practices</li>
+</ul>
+</section>
+<section id="slides" class="level1">
+<h1>Slides</h1>
+<ul>
+<li><code>github.com/ocramz/talks/tree/master/GotLambda_26112017</code></li>
 </ul>
 </section>
 </div>

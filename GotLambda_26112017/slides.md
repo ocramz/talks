@@ -1,4 +1,4 @@
-% Building data microservices in Haskell
+% Building data microservices in Haskell, pt.1
 % Marco Zocca (`github.com/ocramz`)
 % Zimpler, November 29, 2017
 
@@ -15,7 +15,11 @@
 
 - Data ingestion service
 
-A handful of useful Haskell notions, techniques, current good practices and libraries
+A handful of useful Haskell notions, techniques, current good practices and libraries:
+
+- HTTP connections
+- managing complexity with types
+- exception handling
 
 
 
@@ -289,23 +293,44 @@ instance HasCredentials c => Alternative (Cloud c) where
           Nothing -> throwM (UnknownError "d'oh!")
 ```
 
-```
-(<|>) :: Alternative f => f a -> f a -> f a
-empty <|> b == b
-a <|> empty == a
-```
 
 
 
-- `Just _` branch may retry `a1` with different parameters
+- `Just` branch may retry `a1` with different parameters
 - Pattern match directly on `CloudException` constructors and retry selectively
+- Exception type may break the monoid property of Alternative:
 
+```
+a <|> empty == a
+empty <|> b != b
+```
+
+# Summing up
+
+- HTTP connections + authentication
+- Managing complexity with types
+- High- and low-level exception handling
+
+
+# Part 2 of this talk :
+
+- Managing state with `stm`
+- Logging and persistence
+- Deploying with Stack
+
+
+# Thanks !
 
 
 
 # References
 
-- `github.com/ocramz/talks/tree/master/GotLambda_26112017`
 
 - https://www.fpcomplete.com/blog/2017/06/readert-design-pattern
+- https://www.schoolofhaskell.com/user/commercial/content/exceptions-best-practices
 
+
+
+# Slides
+
+- `github.com/ocramz/talks/tree/master/GotLambda_26112017`
