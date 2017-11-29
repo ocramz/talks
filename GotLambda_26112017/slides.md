@@ -8,16 +8,16 @@
 * Data engineer @ RecordUnion
 
 * "Data pipeline"
-* Microservices = functional units in a distributed program
+* Microservices
 
 
 # This talk
 
 - Data ingestion service
 
-A handful of useful Haskell notions and techniques
+A handful of useful Haskell notions, techniques, current good practices and libraries
 
-How I work with libraries and APIs
+
 
 
     
@@ -130,6 +130,8 @@ class MonadIO m => MonadHttp (m :: * -> *) where
   {-# MINIMAL handleHttpException #-}
 ```
 
+- NB : Return type `a` is unconstrained
+
 
 
 
@@ -138,27 +140,44 @@ class MonadIO m => MonadHttp (m :: * -> *) where
 
 ##
 
+- Each provider has its own :
+    - Credentials
+    - Authentication/token refresh mechanism
+    - Handling of invalid input
+    - State
+    - Request rate limiting
+    - Outage modes
+    - etc., etc.
+
+##
+
 ```
 {-# language TypeFamilies #-}
 
-class HasCredentials a where
-  type Credentials a :: *
-  type Token a :: *
+class HasCredentials c where
+  type Credentials c :: *
+  type Token c :: *
 
-data Handle a = Handle {
-    credentials :: Credentials a
-  , token :: TVar (Maybe (Token a))
+data Handle c = Handle {
+    credentials :: Credentials c
+  , token :: TVar (Maybe (Token c))
   }
 ```
+- `TVar` is from `stm`
+
+
+##
 
 ```
+{-# language GeneralizedNewtypeDeriving #-}
+
 newtype Cloud c a = Cloud {
   runCloud :: ReaderT (Handle c) IO a
   } deriving (Functor, Applicative, Monad)
 ```
 
 - `Cloud` will also need `MonadIO`, `MonadThrow`, `MonadCatch`, `CR.MonadRandom`, `MonadReader` instances
-- `TVar` is from `stm`
+
 
 
 ## 
@@ -196,8 +215,14 @@ requestToken = do
 requestGcpOAuth2Token :: (MonadHttp m, CR.MonadRandom m, MonadThrow m) =>
      GCPServiceAccount -> GCPTokenOptions -> m OAuth2Token
 ```
--------
 
+- Q: I don't know how to convince GHC that `OAuth2Token` is the return type of the `GCP`-tagged instance, therefore the type signature was not inferred automatically ("ambiguous return type").
+
+
+##
+
+
+- Running a `Cloud` computation
 
 ```
 getToken :: IO OAuth2Token
@@ -211,6 +236,22 @@ getToken = do
 ```
 evalCloudIO :: (MonadIO m, MonadCatch m, HasCredentials c) => Handle c -> Cloud c a -> m a
 ```
+
+##
+
+```
+import Control.Monad.IO.Class
+import Control.Monad.Reader
+import qualified Control.Monad.Trans.Reader as RT (ask, local)
+import Control.Monad.Catch
+```
+
+Dependencies
+
+- `mtl`
+- `transformers`
+- `exceptions`
+- `stm`
 
 
 

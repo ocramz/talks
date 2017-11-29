@@ -65,7 +65,7 @@
 <ul>
 <li><p>Data engineer @ RecordUnion</p></li>
 <li>&quot;Data pipeline&quot;</li>
-<li><p>Microservices = functional units in a distributed program</p></li>
+<li><p>Microservices</p></li>
 </ul>
 </section>
 <section id="this-talk" class="level1">
@@ -73,8 +73,7 @@
 <ul>
 <li>Data ingestion service</li>
 </ul>
-<p>A handful of useful Haskell notions and techniques</p>
-<p>How I work with libraries and APIs</p>
+<p>A handful of useful Haskell notions, techniques, current good practices and libraries</p>
 </section>
 <section id="requirements" class="level1">
 <h1>Requirements</h1>
@@ -173,30 +172,55 @@ class MonadIO m =&gt; MonadHttp (m :: * -&gt; *) where
   handleHttpException :: HttpException -&gt; m a
   ...
   {-# MINIMAL handleHttpException #-}</code></pre>
+<ul>
+<li>NB : Return type <code>a</code> is unconstrained</li>
+</ul>
 </section>
 <section id="multiple-data-providers" class="level1">
 <h1>Multiple data providers</h1>
 <section id="section-5" class="level2">
 <h2></h2>
+<ul>
+<li>Each provider has its own :
+<ul>
+<li>Credentials</li>
+<li>Authentication/token refresh mechanism</li>
+<li>Handling of invalid input</li>
+<li>State</li>
+<li>Request rate limiting</li>
+<li>Outage modes</li>
+<li>etc., etc.</li>
+</ul></li>
+</ul>
+</section>
+<section id="section-6" class="level2">
+<h2></h2>
 <pre><code>{-# language TypeFamilies #-}
 
-class HasCredentials a where
-  type Credentials a :: *
-  type Token a :: *
+class HasCredentials c where
+  type Credentials c :: *
+  type Token c :: *
 
-data Handle a = Handle {
-    credentials :: Credentials a
-  , token :: TVar (Maybe (Token a))
+data Handle c = Handle {
+    credentials :: Credentials c
+  , token :: TVar (Maybe (Token c))
   }</code></pre>
-<pre><code>newtype Cloud c a = Cloud {
+<ul>
+<li><code>TVar</code> is from <code>stm</code></li>
+</ul>
+</section>
+<section id="section-7" class="level2">
+<h2></h2>
+<pre><code>{-# language GeneralizedNewtypeDeriving #-}
+
+newtype Cloud c a = Cloud {
   runCloud :: ReaderT (Handle c) IO a
   } deriving (Functor, Applicative, Monad)</code></pre>
 <ul>
 <li><code>Cloud</code> will also need <code>MonadIO</code>, <code>MonadThrow</code>, <code>MonadCatch</code>, <code>CR.MonadRandom</code>, <code>MonadReader</code> instances</li>
-<li><code>TVar</code> is from <code>stm</code></li>
 </ul>
 </section>
-<section id="section-6" class="level2">
+<section id="section-8" class="level2">
 <h2></h2>
 <pre><code>{-# language FlexibleInstances #-}
 
@@ -224,7 +248,15 @@ requestToken = do
    requestGcpOAuth2Token saOk opts</code></pre>
 <pre><code>requestGcpOAuth2Token :: (MonadHttp m, CR.MonadRandom m, MonadThrow m) =&gt;
      GCPServiceAccount -&gt; GCPTokenOptions -&gt; m OAuth2Token</code></pre>
-<hr />
+<ul>
+<li>Q: I don't know how to convince GHC that <code>OAuth2Token</code> is the return type of the <code>GCP</code>-tagged instance, therefore the type signature was not inferred automatically (&quot;ambiguous return type&quot;).</li>
+</ul>
+</section>
+<section id="section-9" class="level2">
+<h2></h2>
+<ul>
+<li>Running a <code>Cloud</code> computation</li>
+</ul>
 <pre><code>getToken :: IO OAuth2Token
 getToken = do
    sa &lt;- GCPServiceAccount &lt;$&gt;
@@ -232,6 +264,20 @@ getToken = do
      gcpClientEmail 
    evalCloudIO sa requestToken </code></pre>
 <pre><code>evalCloudIO :: (MonadIO m, MonadCatch m, HasCredentials c) =&gt; Handle c -&gt; Cloud c a -&gt; m a</code></pre>
+</section>
+<section id="section-10" class="level2">
+<h2></h2>
+<pre><code>import Control.Monad.IO.Class
+import Control.Monad.Reader
+import qualified Control.Monad.Trans.Reader as RT (ask, local)
+import Control.Monad.Catch</code></pre>
+<p>Dependencies</p>
+<ul>
+<li><code>mtl</code></li>
+<li><code>transformers</code></li>
+<li><code>exceptions</code></li>
+<li><code>stm</code></li>
+</ul>
 </section>
 </section>
 <section id="references" class="level1">
