@@ -43,6 +43,8 @@ A handful of useful Haskell notions, techniques, current good practices and libr
 ##
 
 - [`req`](http://hackage.haskell.org/package/req) (http://hackage.haskell.org/package/req)
+- Very well designed and documented
+- `req-conduit`
 
 ##
 
