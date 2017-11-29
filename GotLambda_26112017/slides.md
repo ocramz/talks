@@ -268,6 +268,30 @@ Dependencies:
 - `stm`
 
 
+
+# Wait, what?
+
+##
+
+- `ReaderT env IO a` ... no _mutable_ state
+- but `env` contains a TVar
+- ... ?
+
+
+
+##
+
+```
+-- updateToken :: (MonadReader (Handle a) m, MonadIO m) => Token a -> m ()
+updateToken :: HasCredentials c => Token c -> Cloud c ()
+updateToken tok = do
+  tv <- asks token
+  liftIO $ atomically $ writeTVar tv (Just tok)
+```
+
+
+
+
 # Exception handling
 
 ##
@@ -294,9 +318,6 @@ instance HasCredentials c => Alternative (Cloud c) where
           Just _ -> a2
           Nothing -> throwM (UnknownError "d'oh!")
 ```
-
-
-
 
 - `Just` branch may retry `a1` with different parameters
 - Pattern match directly on `CloudException` constructors and retry selectively
