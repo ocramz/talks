@@ -260,7 +260,7 @@ import qualified Control.Monad.Trans.Reader as RT (ask, local)
 import Control.Monad.Catch
 ```
 
-Dependencies
+Dependencies:
 
 - `mtl`
 - `transformers`
