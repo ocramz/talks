@@ -5,15 +5,9 @@
 
 # Hi !
 
-* Data engineer @ RecordUnion
-
-* "Data pipeline"
-* Microservices
-
 
 # This talk
 
-- Data ingestion service
 
 A handful of useful Haskell notions, techniques, current good practices and libraries:
 
@@ -25,8 +19,6 @@ A handful of useful Haskell notions, techniques, current good practices and libr
 
 
     
- 
-
 # Requirements
 
 - Correct
