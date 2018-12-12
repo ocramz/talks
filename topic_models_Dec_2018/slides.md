@@ -22,7 +22,7 @@ A review of three landmark methods from the topic modeling literature
 \multicolumn{1}{r}{}
  &  \multicolumn{1}{c}{Word1} & \multicolumn{1}{c}{Word2} & $\cdots$ \\
 \cline{2-4}
-Document1 & 3 & 2 & $\cdots$ \\
+Document1 & 3 & 1 & $\cdots$ \\
 \cline{2-4}
 Document2 & 2 & 0 & $\cdots$ \\
 \cline{2-4}
