@@ -68,7 +68,7 @@ Generative model:
 Hp:
 
 - Topic dimensionality $k$ fixed
-- Word probabilities parametrized by $\beta_{i,j}$, a hyperparameter like $\bar{\alpha}$
+- $\beta_{i,j}$ and $\bar{\alpha}$ hyperparameters
 
 
 
