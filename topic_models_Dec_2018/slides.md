@@ -6,7 +6,7 @@
 
 # Outline
 
-A review of three landmark methods from the topic modeling literature
+An overview of three landmark methods from the topic modeling literature
 
 - LSI
 - pLSI
@@ -66,7 +66,7 @@ Generative model:
     * Sample document-specific topic mixture $\theta_d \sim Dirichlet(\alpha)$
     * For each word $i \in d$ :
         * Sample topic $z_i \sim Discrete(\theta_d)$
-	* Sample word $w_i \sim Discrete(\phi_{z_i})$
+        * Sample word $w_i \sim Discrete(\phi_{z_i})$
 
 Hp:
 
