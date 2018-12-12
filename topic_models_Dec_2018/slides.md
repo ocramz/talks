@@ -67,9 +67,10 @@ Generative model:
 
 Hp:
 
-- Topic dimensionality $k$ fixed
-- $\beta_{i,j}$ and $\bar{\alpha}$ hyperparameters
+- Topic dimensionality $K$, vocabulary size $V$ fixed
+- $\bar{\beta} \in \mathbb{R}_+^{K \times V}$ and $\bar{\alpha} \in \mathbb{R}_+^K$ hyperparameters
 
+A number of alternative formulations have been shown.
 
 
 # Dirichlet process
