@@ -33,9 +33,9 @@ $\cdots$ & $\cdots$ & $\cdots$ & $\cdots$ \\
 
 LSI : Identify a subspace that captures most of the variance in the document collection
 
-Rank $r$ SVD factorization of the count data : $A \approx A' \triangleq U \Sigma V^\top$ where $\Sigma \triangleq diag(\sigma_1, \cdots \sigma_r)$
+Rank-$r$ SVD factorization of the count data : $A \approx A' \triangleq U^\top \Sigma V$ where $\Sigma \triangleq diag(\sigma_1, \cdots \sigma_r)$
 
-Document similarity : project test document onto column of $V^\top$ that corresponds to largest singular value
+Document similarity : project test document onto column of $U$ that corresponds to largest singular value.
 
 
 
@@ -43,11 +43,9 @@ Document similarity : project test document onto column of $V^\top$ that corresp
 
 Introduce _topics_ $z_k$
 
-Each word is sampled from a mixture model $p(w) \triangleq \sum\limits_k p(w|z_k) p(z_k)$
+Word-document _joint distribution_ $$p(d, w) \triangleq \sum\limits_k p(d|z_k) p(z_k) p(w|z_k)$$
 
-Word-document _joint distribution_ $p(w, d) \triangleq \sum\limits_k p(w|z_k) p(d|z_k) p(z_k)$
-
-Overparametrized $\rightarrow$ inference by iterative approximation (such as EM).
+Inference by iterative approximation of the factors (such as EM).
 
 Caution : both in LSI and pLSI the number of parameters is linear in the size of the corpus. 
 
