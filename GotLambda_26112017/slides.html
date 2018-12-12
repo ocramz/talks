@@ -290,12 +290,12 @@ import Control.Monad.Catch</code></pre>
 </ul>
 </section>
 </section>
-<section id="wait-what" class="level1">
-<h1>Wait, what?</h1>
+<section id="mutable-references-in-readert" class="level1">
+<h1>Mutable references in ReaderT</h1>
 <section id="section-11" class="level2">
 <h2></h2>
 <ul>
-<li><code>ReaderT env IO a</code> ... no <em>mutable</em> state</li>
+<li><code>ReaderT env IO a</code> claimed no <em>mutable</em> state</li>
 <li>but <code>env</code> contains a TVar</li>
 <li>... ?</li>
 </ul>
