@@ -59,18 +59,21 @@ One level further up : documents represented as mixtures of topics
 
 Generative model:
 
-* For each document:
-    * Sample topic mixture $\bar{\theta} \sim Dirichlet(\bar{\alpha})$
-    * For each word $\{w_i \cdots w_N \}$ in a document :
-        * Sample topic $z_n \sim Multinomial(\bar{\theta})$
-        * Sample word $w_n \sim p(w_n|z_n, \bar{\beta})$, multinomial conditioned on topic $z_n$
+* For each latent topic $k \in \{1 \cdots K \}$
+    * Sample topic mixture $\phi_k \sim Dirichlet(\beta)$
+
+* For each document $d \in D$ :
+    * Sample document-specific topic mixture $\theta_d \sim Dirichlet(\alpha)$
+    * For each word $i \in d$ :
+        * Sample topic $z_i \sim Discrete(\theta_d)$
+	* Sample word $w_i \sim Discrete(\phi_{z_i})$
 
 Hp:
 
-- Topic dimensionality $K$, vocabulary size $V$ fixed
-- $\bar{\beta} \in \mathbb{R}_+^{K \times V}$ and $\bar{\alpha} \in \mathbb{R}_+^K$ hyperparameters
+- Topic dimensionality $K$ fixed
+- $\beta \in \mathbb{R}_+$ and $\alpha \in \mathbb{R}_+$ hyperparameters
 
-A number of alternative formulations and simplifications can be seen in the subsequent literature.
+The one above is a version based on the _symmetric_ Dirichlet process, from (Darling 2011)
 
 
 # Dirichlet process
