@@ -68,7 +68,7 @@ Generative model:
 Hp:
 
 - Topic dimensionality $k$ fixed
-- Word probabilities $\beta_{i,j} \triangleq p(w_j | z_i)$ fixed, to be estimated
+- Word probabilities $\beta_{i,j}$ a hyperparameter like $\bar{\alpha}$
 
 
 
@@ -109,7 +109,7 @@ Inference:
 - MCMC based: collapsed Gibbs sampling (Griffiths 2004)
     - $z$ is a sufficient statistic for $\theta$ and $w$
     - Refer to (Darling 2011) for full details
-    - Streaming, sparsity-based optimizations in later literature
+    - Streaming and sparsity-based optimizations in later literature
 
 
 
