@@ -61,7 +61,7 @@ One level further up : documents represented as mixtures of topics
 
 Generative model:
 
-1. For each document:
+* For each document:
     * Sample topic mixture $\bar{\theta} \sim Dirichlet(\bar{\alpha})$
     * For each word $\{w_i \cdots w_N \}$ in a document :
         * Sample topic $z_n \sim Multinomial(\bar{\theta})$
