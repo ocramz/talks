@@ -70,7 +70,7 @@ Hp:
 - Topic dimensionality $K$, vocabulary size $V$ fixed
 - $\bar{\beta} \in \mathbb{R}_+^{K \times V}$ and $\bar{\alpha} \in \mathbb{R}_+^K$ hyperparameters
 
-A number of alternative formulations have been shown.
+A number of alternative formulations and simplifications can be seen in the subsequent literature.
 
 
 # Dirichlet process
