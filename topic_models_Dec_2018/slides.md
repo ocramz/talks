@@ -6,6 +6,8 @@
 
 # Outline
 
+A review of three landmark methods from the topic modeling literature
+
 - LSI
 - pLSI
 - LDA
