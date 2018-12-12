@@ -20,9 +20,9 @@
 \multicolumn{1}{r}{}
  &  \multicolumn{1}{c}{Word1} & \multicolumn{1}{c}{Word2} & $\cdots$ \\
 \cline{2-4}
-Document1 & 0 & 2 & $\cdots$ \\
+Document1 & 3 & 2 & $\cdots$ \\
 \cline{2-4}
-Document2 & 1 & 0 & $\cdots$ \\
+Document2 & 2 & 0 & $\cdots$ \\
 \cline{2-4}
 $\cdots$ & $\cdots$ & $\cdots$ & $\cdots$ \\
 \end{tabular}
@@ -47,7 +47,7 @@ Word-document _joint distribution_ $p(w, d) \triangleq \sum\limits_k p(w|z_k) p(
 
 Overparametrized $\rightarrow$ inference by iterative approximation (such as EM).
 
-Caution : number of parameters is linear in the size of the corpus. 
+Caution : both in LSI and pLSI the number of parameters is linear in the size of the corpus. 
 
 
 
@@ -57,10 +57,19 @@ Caution : number of parameters is linear in the size of the corpus.
 
 One level further up : documents represented as mixtures of topics
 
-- Sample $\theta \sim Dirichlet(\alpha)$
-- For each word $\{w_i \cdots w_N \}$ :
-    - Sample $z_n \sim Multinomial(\theta)$
-    - Sample word $w_n \sim p(w_n|z_n, \beta)$, multinomial conditioned on topic $z_n$
+Generative model:
+
+1. For each document:
+    * Sample topic mixture $\bar{\theta} \sim Dirichlet(\bar{\alpha})$
+    * For each word $\{w_i \cdots w_N \}$ in a document :
+        * Sample topic $z_n \sim Multinomial(\bar{\theta})$
+        * Sample word $w_n \sim p(w_n|z_n, \bar{\beta})$, multinomial conditioned on topic $z_n$
+
+Hp:
+
+- Topic dimensionality $k$ fixed
+- Word probabilities $\beta_{i,j} \triangleq p(w_j | z_i)$ fixed, to be estimated
+
 
 
 # Dirichlet process
@@ -75,12 +84,43 @@ $\theta_i \in (0, 1), \sum\limits_i \theta_i = 1$
 
 
 
+# LDA
+
+Joint p.d.f. : $p(\theta, z, w|\alpha, \beta) \triangleq p(\theta|\alpha) \prod\limits_n p(z_n|\theta) p(w_n|z_n, \beta)$
+
+Posterior p.d.f. by rewriting the above via Bayes' Theorem :
+
+$$p(\theta, z|w, \alpha, \beta) = \frac{p(\theta, z, w | \alpha, \beta)}{p(w|\alpha, \beta)}$$  
+
+where 
+
+$p(w|\alpha, \beta)$ is obtained by marginalizing the JPDF over $z$ and $\theta$:
+
+$$p(w|\alpha, \beta) \triangleq \bigintsss p(\theta|\alpha) \left( \prod\limits_n \sum\limits_{z_n} p(z_n|\theta)p(w_n|z_n, \beta)\right) d\theta$$  \qquad \tiny{GNARLY}
+
+
+# LDA
+
+Inference:
+
+- Original approach (Blei 2003) uses a variational formulation
+    - minimize relative entropy between approximate variational family and true posterior
+
+- MCMC based: collapsed Gibbs sampling (Griffiths 2004)
+    - $z$ is a sufficient statistic for $\theta$ and $w$
+    - Refer to (Darling 2011) for full details
+    - Streaming, sparsity-based optimizations in later literature
+
 
 
 # References
 
-T. Hofmann, Probabilistic Latent Semantic Analysis
+- T. Hofmann, Probabilistic Latent Semantic Analysis
 
-D. M. Blei, A. Y. Ng, M. I. Jordan, Latent Dirichlet Allocation, JMLR 2003
+- D. M. Blei, A. Y. Ng, M. I. Jordan, Latent Dirichlet Allocation, JMLR 2003
+
+- T. L. Griffiths, M. Steyvers, Finding Scientific Topics, PNAS 2004
+
+- W. M. Darling, A theoretical and practical implementation tutorial on topic modeling and Gibbs sampling, 2011
 
 
