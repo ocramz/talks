@@ -80,9 +80,9 @@ The one above is a version based on the _symmetric_ Dirichlet process, from (Dar
 
 ![Dirichlet PDF (K = 3)](img/dirichlet.png){ width=250px }
 
-$\bar{x} \sim Dirichlet(\bar{\alpha})$
+$\bar{x} \sim Dirichlet(K, \bar{\alpha})$
 
-$p(\bar{x} | \bar{\alpha}) = p(x_1, \cdots x_K | \alpha_1, \cdots \alpha_K) = \frac{1}{B(\bar{\alpha})} \prod\limits_{i=1}^K x_i^{\alpha_i - 1}$
+$p(\bar{x} | K, \bar{\alpha}) = p(x_1, \cdots x_K | \alpha_1, \cdots \alpha_K) \triangleq \frac{1}{B(\bar{\alpha})} \prod\limits_{i=1}^K x_i^{\alpha_i - 1}$
 
 $x_i \in (0, 1), \sum\limits_i x_i = 1$
 
