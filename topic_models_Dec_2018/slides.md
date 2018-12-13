@@ -24,7 +24,9 @@ An overview of three landmark methods from the topic modeling literature
 \cline{2-4}
 Document1 & 3 & 1 & $\cdots$ \\
 \cline{2-4}
-Document2 & 2 & 0 & $\cdots$ \\
+Document2 & 0 & 2 & $\cdots$ \\
+\cline{2-4}
+Document3 & 1 & 0 & $\cdots$ \\
 \cline{2-4}
 $\cdots$ & $\cdots$ & $\cdots$ & $\cdots$ \\
 \end{tabular}
@@ -33,7 +35,7 @@ $\cdots$ & $\cdots$ & $\cdots$ & $\cdots$ \\
 
 LSI : Identify a subspace that captures most of the variance in the document collection
 
-Rank-$r$ SVD factorization of the count data : $A \approx A' \triangleq U^\top \Sigma V$ where $\Sigma \triangleq diag(\sigma_1, \cdots \sigma_r)$
+Rank-$r$ SVD factorization of the count data : $A \approx A' \triangleq U \Sigma V^\top$ where $\Sigma \triangleq diag(\sigma_1, \cdots \sigma_r)$
 
 Document similarity : project test document onto column of $U$ that corresponds to largest singular value.
 
@@ -73,10 +75,10 @@ Hp:
 - Topic dimensionality $K$ fixed
 - $\beta \in \mathbb{R}_+$ and $\alpha \in \mathbb{R}_+$ hyperparameters
 
-The one above is a version based on the _symmetric_ Dirichlet process, from (Darling 2011)
+The one above is a version based on the _symmetric_ Dirichlet distribution, from (Darling 2011)
 
 
-# Dirichlet process
+# Dirichlet distribution
 
 ![Dirichlet PDF (K = 3)](img/dirichlet.png){ width=250px }
 
@@ -90,7 +92,7 @@ $x_i \in (0, 1), \sum\limits_i x_i = 1$
 
 # LDA
 
-Joint p.d.f. : $p(\theta, z, w|\alpha, \beta) \triangleq p(\theta|\alpha) p(\phi|\beta) \prod\limits_n p(z_n|\theta) p(w_n|\phi)$
+Joint p.d.f. : $p(\theta, \phi, z, w|\alpha, \beta) \triangleq p(\theta|\alpha) p(\phi|\beta) \prod\limits_n p(z_n|\theta) p(w_n|\phi)$
 
 Posterior p.d.f. by rewriting the above via Bayes' Theorem :
 
