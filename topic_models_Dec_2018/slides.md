@@ -60,10 +60,10 @@ One level further up : documents represented as mixtures of topics
 Generative model:
 
 * For each latent topic $k \in \{1 \cdots K \}$
-    * Sample topic mixture $\phi_k \sim Dirichlet(\beta)$
+    * Sample word mixture $\phi_k \sim Dirichlet(\beta)$
 
 * For each document $d \in D$ :
-    * Sample document-specific topic mixture $\theta_d \sim Dirichlet(\alpha)$
+    * Sample document topic mixture $\theta_d \sim Dirichlet(\alpha)$
     * For each word $i \in d$ :
         * Sample topic $z_i \sim Discrete(\theta_d)$
         * Sample word $w_i \sim Discrete(\phi_{z_i})$
@@ -80,27 +80,27 @@ The one above is a version based on the _symmetric_ Dirichlet process, from (Dar
 
 ![Dirichlet PDF (K = 3)](img/dirichlet.png){ width=250px }
 
-$\bar{\theta} \sim Dirichlet(\bar{\alpha})$
+$\bar{x} \sim Dirichlet(\bar{\alpha})$
 
-$p(\bar{\theta} | \bar{\alpha}) = p(\theta_1, \cdots \theta_K | \alpha_1, \cdots \alpha_K) = \frac{1}{B(\bar{\alpha})} \prod\limits_{i=1}^K \theta_i^{\alpha_i - 1}$
+$p(\bar{x} | \bar{\alpha}) = p(x_1, \cdots x_K | \alpha_1, \cdots \alpha_K) = \frac{1}{B(\bar{\alpha})} \prod\limits_{i=1}^K x_i^{\alpha_i - 1}$
 
-$\theta_i \in (0, 1), \sum\limits_i \theta_i = 1$
+$x_i \in (0, 1), \sum\limits_i x_i = 1$
 
 
 
 # LDA
 
-Joint p.d.f. : $p(\theta, z, w|\alpha, \beta) \triangleq p(\theta|\alpha) \prod\limits_n p(z_n|\theta) p(w_n|z_n, \beta)$
+Joint p.d.f. : $p(\theta, z, w|\alpha, \beta) \triangleq p(\theta|\alpha) p(\phi|\beta) \prod\limits_n p(z_n|\theta) p(w_n|\phi)$
 
 Posterior p.d.f. by rewriting the above via Bayes' Theorem :
 
-$$p(\theta, z|w, \alpha, \beta) = \frac{p(\theta, z, w | \alpha, \beta)}{p(w|\alpha, \beta)}$$  
+$$p(\theta, \phi, z|w, \alpha, \beta) = \frac{p(\theta, \phi, z, w | \alpha, \beta)}{p(w|\alpha, \beta)}$$  
 
 where 
 
-$p(w|\alpha, \beta)$ is obtained by marginalizing the JPDF over $z$ and $\theta$:
+$p(w|\alpha, \beta)$ is obtained by marginalizing the JPDF over $z$, $\phi$ and $\theta$:
 
-$$p(w|\alpha, \beta) \triangleq \bigintsss p(\theta|\alpha) \left( \prod\limits_n \sum\limits_{z_n} p(z_n|\theta)p(w_n|z_n, \beta)\right) d\theta$$  \qquad \tiny{GNARLY}
+$$p(w|\alpha, \beta) \triangleq \iint p(\theta|\alpha) p(\phi|\beta) \left( \prod\limits_n \sum\limits_{z_n} p(z_n|\theta)p(w_n|\phi)\right) d\phi d\theta $$  \qquad \tiny{GNARLY}
 
 
 # LDA
@@ -111,7 +111,7 @@ Inference:
     - minimize relative entropy between approximate variational family and true posterior
 
 - MCMC based: collapsed Gibbs sampling (Griffiths 2004)
-    - $z$ is a sufficient statistic for $\theta$ and $w$
+    - $z$ is a sufficient statistic for $\theta$ and $\phi$
     - Refer to (Darling 2011) for full details
     - Streaming and sparsity-based optimizations in later literature
 
