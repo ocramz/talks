@@ -35,7 +35,7 @@ $\cdots$ & $\cdots$ & $\cdots$ & $\cdots$ \\
 
 LSI : Identify a subspace that captures most of the variance in the document collection
 
-Rank-$r$ SVD factorization of the count data : $A \approx A' \triangleq U^\top \Sigma V$ where $\Sigma \triangleq diag(\sigma_1, \cdots \sigma_r)$
+Rank-$r$ SVD factorization of the count data : $A \approx A' \triangleq U \Sigma V^\top$ where $\Sigma \triangleq diag(\sigma_1, \cdots \sigma_r)$
 
 Document similarity : project test document onto column of $U$ that corresponds to largest singular value.
 
