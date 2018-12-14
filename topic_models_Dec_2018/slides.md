@@ -86,11 +86,11 @@ $\bar{x} \sim Dirichlet(K, \bar{\alpha})$
 
 $p(\bar{x} | K, \bar{\alpha}) = p(x_1, \cdots x_K | \alpha_1, \cdots \alpha_K) \triangleq \frac{1}{B(\bar{\alpha})} \prod\limits_{i=1}^K x_i^{\alpha_i - 1}$
 
-$x_i \in (0, 1), \sum\limits_i x_i = 1$
+Samples $\bar{x}$ are vectors of mixing proportions $x_i \in (0, 1), \sum\limits_i x_i = 1$
 
 
 
-# LDA
+# LDA : Bayesian inference
 
 Joint p.d.f. : $p(\theta, \phi, z, w|\alpha, \beta) \triangleq p(\theta|\alpha) p(\phi|\beta) \prod\limits_n p(z_n|\theta) p(w_n|\phi)$
 
@@ -105,9 +105,8 @@ $p(w|\alpha, \beta)$ is obtained by marginalizing the JPDF over $z$, $\phi$ and 
 $$p(w|\alpha, \beta) \triangleq \iint p(\theta|\alpha) p(\phi|\beta) \left( \prod\limits_n \sum\limits_{z_n} p(z_n|\theta)p(w_n|\phi)\right) d\phi d\theta $$  \qquad \tiny{GNARLY}
 
 
-# LDA
+# LDA : Inference methods
 
-Inference:
 
 - Original approach (Blei 2003) uses a variational formulation
     - minimize relative entropy between approximate variational family and true posterior
@@ -116,6 +115,15 @@ Inference:
     - $z$ is a sufficient statistic for $\theta$ and $\phi$
     - Refer to (Darling 2011) for full details
     - Streaming and sparsity-based optimizations in later literature
+
+# Questions (Dec. 14, 2018)
+
+- What are the advantages of using a generative method such as LDA ?
+- How to perform text similarity search with LDA ?
+    - One can't (directly) as it's an unsupervised clustering method
+    - $\rightarrow$ supervised LDA
+
+
 
 
 
